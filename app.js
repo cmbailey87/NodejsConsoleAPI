@@ -6,6 +6,11 @@ const https = require('https');
 // user name constant 
 // move to bottom
 
+//print error
+function printError(e) {
+    console.error(e.message);
+}
+
 // to print message to console
 // function has its arguements
 function printMessage(username, badgeCount, points) {
@@ -39,18 +44,22 @@ function getProfileData(username) {
             });
 
             response.on('end', () => {
-                // Parse the data
-                // const profile = JSON.parse(body);
-                const profile = JSON.parse(body);
-                printMessage(username, profile.badges.length, profile.points.JavaScript);
-                // print the data
+                try {
+                    // Parse the data
+                    // const profile = JSON.parse(body);
+                    const profile = JSON.parse(body);
+                    printMessage(username, profile.badges.length, profile.points.JavaScript);
+                    // print the data
+                } catch (e) {
+                    printError(e);
+                }
             });
 
         });
         // variable e is for the error on request adn try catch.
-        request.on('error', e => console.error(`Problem with request: ${e.message}`))
+        request.on('error', e => printError)
     } catch (e) {
-        console.error(e.message);
+        printError(e);
     }
 }
 // to run the code mutltiple times...
